@@ -13,6 +13,11 @@ jobs:
             - uses: actions/checkout@v7
             - name: build toolchain container
               run: docker build . -t builder
+            - name: debug docker image
+              run: |
+                 docker run --rm builder find /opt/devkitpro -name "wups.h" 2>/dev/null || echo "NOT FOUND"
+                 docker run --rm builder ls -la /opt/devkitpro/ 2>/dev/null || echo "EMPTY"
+                 docker run --rm builder ls -la /opt/devkitpro/wups/ 2>/dev/null || echo "NO WUPS DIR"
             - uses: ammaraskar/gcc-problem-matcher@master
             - name: build Mobileprocontroller
               run: docker run --rm -v ${PWD}:/app -w /app builder
@@ -20,8 +25,4 @@ jobs:
               with:
                   name: MPC
                   path: dist/
-            - name: debug docker image
-              run: |
-                 docker run --rm builder find /opt/devkitpro -name "wups.h" 2>/dev/null || echo "NOT FOUND"
-                 docker run --rm builder ls -la /opt/devkitpro/ 2>/dev/null || echo "EMPTY"
-                 docker run --rm builder ls -la /opt/devkitpro/wups/ 2>/dev/null || echo "NO WUPS DIR"
+
