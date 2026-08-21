@@ -19,11 +19,11 @@ WUT_ROOT := $(DEVKITPRO)/wut
 # DATA is a list of directories containing data files
 # INCLUDES is a list of directories containing header files
 #-------------------------------------------------------------------------------
-TARGET		:=	SShop-sucuboy
+TARGET		:=	Mobile_Pro_Controller
 BUILD		:=	build
-SOURCES		:=	src src/patches src/utils src/ext/inih common
+SOURCES		:=	src 
 DATA		:=	data
-INCLUDES	:=	src src/ext/inih src/lang common
+INCLUDES	:=	src 
 
 #-------------------------------------------------------------------------------
 # options for code generation
