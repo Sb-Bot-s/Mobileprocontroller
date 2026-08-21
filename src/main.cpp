@@ -125,9 +125,9 @@ static void FillStaticProControllerData_KPAD(KPADStatus *kpad) {
 
 static void FillStaticProControllerData_WPAD(WPADStatusProController *wpad) {
     memset(wpad, 0, sizeof(WPADStatusProController));
-    wpad->err           = 0;
-    wpad->extensionType = WPAD_EXT_PRO_CONTROLLER;
-    wpad->dataFormat    = WPAD_FMT_PRO_CONTROLLER;
+    wpad->core.err           = 0;
+    wpad->core.extensionType = WPAD_EXT_PRO_CONTROLLER;
+    wpad->core.format        = WPAD_FMT_PRO_CONTROLLER;
     wpad->buttons = WPAD_PRO_BUTTON_A;
     wpad->leftStick.x  = 0;
     wpad->leftStick.y  = 0;
