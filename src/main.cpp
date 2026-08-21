@@ -13,7 +13,7 @@
 WUPS_PLUGIN_NAME("Mobile Pro Controller");
 WUPS_PLUGIN_DESCRIPTION("Use your phone as a Wii U Pro Controller (Phase 1)");
 WUPS_PLUGIN_VERSION("v0.1.0");
-WUPS_PLUGIN_AUTHOR("TuNombre");
+WUPS_PLUGIN_AUTHOR("Sucuboy_u");
 WUPS_PLUGIN_LICENSE("MIT");
 
 WUPS_USE_WUT_DEVOPTAB();
