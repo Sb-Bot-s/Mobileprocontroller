@@ -20,3 +20,8 @@ jobs:
               with:
                   name: MPC
                   path: dist/
+            - name: debug docker image
+              run: |
+                 docker run --rm builder find /opt/devkitpro -name "wups.h" 2>/dev/null || echo "NOT FOUND"
+                 docker run --rm builder ls -la /opt/devkitpro/ 2>/dev/null || echo "EMPTY"
+                 docker run --rm builder ls -la /opt/devkitpro/wups/ 2>/dev/null || echo "NO WUPS DIR"
