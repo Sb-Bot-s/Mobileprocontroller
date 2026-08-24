@@ -1,4 +1,5 @@
-name: MPC-Releace
+name: MPC-Release
+
 permissions:
   contents: write
 
@@ -6,30 +7,29 @@ on:
   workflow_dispatch:
 
 jobs:
-    relace-MPC:
-        runs-on: ubuntu-22.04
-        steps:
-            - uses: actions/checkout@v7
-            - name: build toolchain container
-              run: docker build . -t builder
-            - uses: ammaraskar/gcc-problem-matcher@master
-            - name: build Mobileprocontroller
-              run: docker run --rm -v ${PWD}:/app -w /app builder
-            - name: Get plugin version
-              id: version
-              run: |
-                VERSION=$(grep -oP 'WUPS_PLUGIN_VERSION\("\K[^"]+' src/main.cpp)
-                echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+  release-MPC:
+    runs-on: ubuntu-latest
 
-            - name: Build
-              run: make
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            - name: Create GitHub Release
-              uses: softprops/action-gh-release@v2
-              with:
-              tag_name: ${{ steps.version.outputs.version }}
-              name: Release ${{ steps.version.outputs.version }}
-              files: |
-               Mobileprocontroller.wps
-         env:
+      - name: Get plugin version
+        id: version
+        run: |
+          VERSION=$(grep -oP 'WUPS_PLUGIN_VERSION\("\K[^"]+' src/main.cpp)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Version: $VERSION"
+
+      - name: Build
+        run: docker run --rm -v ${PWD}:/app -w /app builder
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: Release ${{ steps.version.outputs.version }}
+          files: |
+            Mobileprocontroller.wps
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
