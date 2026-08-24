@@ -1,0 +1,35 @@
+name: MPC-Releace
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+    build-MPC:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v7
+            - name: build toolchain container
+              run: docker build . -t builder
+            - uses: ammaraskar/gcc-problem-matcher@master
+            - name: build Mobileprocontroller
+              run: docker run --rm -v ${PWD}:/app -w /app builder
+            - name: Get plugin version
+              id: version
+              run: |
+                VERSION=$(grep -oP 'WUPS_PLUGIN_VERSION\("\K[^"]+' src/main.cpp)
+                echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+            - name: Build
+              run: make
+
+            - name: Create GitHub Release
+              uses: softprops/action-gh-release@v2
+              with:
+              tag_name: ${{ steps.version.outputs.version }}
+              name: Release ${{ steps.version.outputs.version }}
+              files: |
+               Mobileprocontroller.wps
+         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
