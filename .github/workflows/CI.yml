@@ -1,0 +1,28 @@
+name: MPC-CI
+permissions:
+  contents: read
+
+on:
+- push
+- pull_request
+
+jobs:
+    build-MPC:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v7
+            - name: build toolchain container
+              run: docker build . -t builder
+            - name: debug docker image
+              run: |
+                 docker run --rm builder find /opt/devkitpro -name "wups.h" 2>/dev/null || echo "NOT FOUND"
+                 docker run --rm builder ls -la /opt/devkitpro/ 2>/dev/null || echo "EMPTY"
+                 docker run --rm builder ls -la /opt/devkitpro/wups/ 2>/dev/null || echo "NO WUPS DIR"
+            - uses: ammaraskar/gcc-problem-matcher@master
+            - name: build Mobileprocontroller
+              run: docker run --rm -v ${PWD}:/app -w /app builder
+            - uses: actions/upload-artifact@v7
+              with:
+                  name: MPC
+                  path: dist/
+
