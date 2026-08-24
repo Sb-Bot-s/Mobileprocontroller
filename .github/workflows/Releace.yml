@@ -21,6 +21,9 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Version: $VERSION"
 
+      - name: build toolchain container
+        run: docker build . -t builder
+
       - name: Build
         run: docker run --rm -v ${PWD}:/app -w /app builder
 
